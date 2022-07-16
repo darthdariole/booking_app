@@ -97,10 +97,17 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future<void> _readCustFile() async {
+    await StorageUtil.getInstance();
     File? customerFile;
 
-    String _filePath = await FolderStructure.getImportFilePath() +
-        "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents";
+    String _filePath = "";
+
+    if (StorageUtil.getString("customImportPath") != "") {
+      _filePath = StorageUtil.getString("customImportPath");
+    } else {
+      _filePath = await FolderStructure.getImportFilePath() +
+          "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents";
+    }
     List<FileSystemEntity> _listFiles = [];
     var dir = Directory(_filePath);
     await dir.list().forEach((element) {
@@ -145,10 +152,16 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   Future<void> _readProductFile() async {
+    await StorageUtil.getInstance();
     File? productFile;
 
-    String _filePath = await FolderStructure.getImportFilePath() +
-        "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents/";
+    String _filePath = "";
+    if (StorageUtil.getString("customImportPath") != "") {
+      _filePath = StorageUtil.getString("customImportPath");
+    } else {
+      _filePath = await FolderStructure.getImportFilePath() +
+          "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents/";
+    }
     List<FileSystemEntity> listFiles = [];
     Directory dir = Directory(_filePath);
     print(await dir.list().length);
@@ -381,6 +394,52 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   builder: (context) {
                     return SalemanDetails();
                   });
+            },
+          ),
+          ListTile(
+            title: const Text("Use Custom path."),
+            subtitle: const Text(
+                "You can use custom path, where application will look for files to import."),
+            onTap: () {
+              String _pathText = "";
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: TextField(
+                      maxLines: 2,
+                      onChanged: (value) {
+                        _pathText = value;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        label: const Text("Custom Path"),
+                        hintText:
+                            "Please exclude file name and / (slash) from path.",
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          if (_pathText != "") {
+                            StorageUtil.getInstance();
+                            StorageUtil.putString(
+                                "customImportPath", _pathText);
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text("Save"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
