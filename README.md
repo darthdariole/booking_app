@@ -1,7 +1,7 @@
 # booking_app
 
 
-Booking application created in Flutter by Daud Irfan [Twitter](https://twitter.com/darthdariole)
+Booking application created in Flutter by [Daud Irfan](https://twitter.com/darthdariole)
 
 ## Features
 1. Create orders.
