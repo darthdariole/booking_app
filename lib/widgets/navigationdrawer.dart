@@ -6,6 +6,7 @@ import 'package:booking_app/helpers/folderStructure.dart';
 import 'package:booking_app/helpers/ordersDBHelper.dart';
 import 'package:booking_app/helpers/productDBHelper.dart';
 import 'package:booking_app/models/product.dart';
+import 'package:booking_app/screens/fileshistory.dart';
 import 'package:booking_app/widgets/salemanDetails.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +168,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     print(await dir.list().length);
     await dir.list().forEach((element) {
       if (element.toString().contains("PRODUCTSIMP")) {
-        print("Files found: " + element.path);
+        print("Product files found: " + element.path);
         listFiles.add(element);
       }
     });
@@ -183,21 +184,34 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
         }
       });
     }
+    int proCounter = 0;
     if (productFile != null) {
-      print("Files found (selected file): " + productFile!.path);
+      print("Product files found (selected file): " + productFile!.path);
       await productFile!.readAsLines().then((line) {
-        line.forEach((string) {
-          List<String> productsLineArray = string.split("~;");
-          Product? product = Product(
-              code: productsLineArray.elementAt(0),
-              description: productsLineArray.elementAt(1).replaceAll("'", ""),
-              tradePrice: double.parse(productsLineArray.elementAt(2)),
-              companyId: productsLineArray.elementAt(3),
-              companyName: productsLineArray.elementAt(4),
-              groupName: productsLineArray.elementAt(5),
-              retailPrice: double.parse(productsLineArray.elementAt(6)));
-          products.add(product);
-        });
+        line.forEach(
+          (string) {
+            List<String> productsLineArray = string.split("~;");
+            if (proCounter == 0) {
+              //Code here to insert Unit name and Unit address into pref
+              StorageUtil.putString(
+                  "unitName", productsLineArray[0].toString());
+              StorageUtil.putString(
+                  "unitAddress", productsLineArray[1].toString());
+            } else {
+              Product? product = Product(
+                  code: productsLineArray.elementAt(0),
+                  description:
+                      productsLineArray.elementAt(1).replaceAll("'", ""),
+                  tradePrice: double.parse(productsLineArray.elementAt(2)),
+                  companyId: productsLineArray.elementAt(3),
+                  companyName: productsLineArray.elementAt(4),
+                  groupName: productsLineArray.elementAt(5),
+                  retailPrice: double.parse(productsLineArray.elementAt(6)));
+              products.add(product);
+            }
+            proCounter++;
+          },
+        );
       }).whenComplete(() => _proFileSuccess = true);
     } else {
       print("No file found");
@@ -266,20 +280,38 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Order Taking App",
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const Text(
-                      "Developed by Daira Solutions (0320-0006697)",
-                      style: TextStyle(
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      overflow: TextOverflow.visible,
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/invoice(1).png',
+                          fit: BoxFit.scaleDown,
+                          height: 50.0,
+                          width: 50.0,
+                        ),
+                        SizedBox(
+                          width: 200.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Order Taking App",
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                "Developed by Daira Solutions (0320-0006697)",
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                overflow: TextOverflow.visible,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     Divider(
                       height: 24.0,
@@ -440,6 +472,14 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   );
                 },
               );
+            },
+          ),
+          ListTile(
+            title: const Text('Files History'),
+            subtitle: const Text('List of files generated by user'),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => FilesHistory()));
             },
           ),
         ],

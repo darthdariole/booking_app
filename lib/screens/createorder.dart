@@ -638,6 +638,7 @@ class _CreateOrderState extends State<CreateOrder> {
                       enabled: !_viewMode,
                       focusNode: _descriptionFocus,
                       controller: _nameController,
+                      /*Old code in which typing brought up the search products screen.
                       onChanged: (value) async {
                         Product? product = await Navigator.push(
                             context,
@@ -646,6 +647,31 @@ class _CreateOrderState extends State<CreateOrder> {
                                       productSearch: true,
                                       searchTextFromCreateOrder: value,
                                     )));
+                        if (product != null) {
+                          setState(() {
+                            _product = product;
+                            _codeController.text = product.code!;
+                            _nameController.text = product.description!;
+                          });
+                          _qtyFocus!.requestFocus();
+                        }
+                      },
+                      */
+                      /*
+                      NEW CODE IN WHICH TYPING SOMETHING AND PRESSING SEARCH BUTTON
+                      BRINGS FORWARD THE SEARCH PRODUCT SCREEN.
+                      */
+                      /*
+                      ACCORDING TO NEW RULES WE HAVE TO REVERT BACK THE OLD METHOD
+                      OF TYPING AND OTHER SCREEN COMING TO FRONT.
+                      */
+                      onChanged: (value) async {
+                        Product? product = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Search(
+                                    productSearch: true,
+                                    searchTextFromCreateOrder: value)));
                         if (product != null) {
                           setState(() {
                             _product = product;

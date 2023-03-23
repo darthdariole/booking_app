@@ -20,11 +20,9 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
-    _searchController.addListener(() {
-      setState(() {
-        searchText = _searchController.text;
-      });
-    });
+    this.searchText = widget.searchTextFromCreateOrder;
+    _searchController..text = searchText!;
+
     super.initState();
   }
 
@@ -38,20 +36,35 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: TextField(
+        centerTitle: true,
+        toolbarHeight: 50.0,
+        title: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          TextField(
             controller: _searchController,
+            onChanged: (text) {
+              print("Search text: " + searchText!);
+
+              setState(() {
+                searchText = text;
+              });
+            },
             autofocus: true,
             decoration: InputDecoration(
-              isDense: true,
+              border: UnderlineInputBorder(),
+              isDense: false,
               hintText: "Type to Search...",
-              suffixIcon: Icon(Icons.search),
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              focusColor: Colors.white,
             ),
           ),
-        ),
+
+          /*
+          TextFormField(
+            initialValue: ,
+            decoration: InputDecoration(
+              hintText: "Type to search...",
+            ),
+          ),
+          */
+        ]),
       ),
       body: FutureBuilder(
         initialData: [],

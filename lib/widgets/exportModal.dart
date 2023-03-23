@@ -157,10 +157,11 @@ class _ExportOrderState extends State<ExportOrder> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-          top: 30.0,
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 10.0,
-          right: 10.0),
+        top: 30.0,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        left: 10.0,
+        right: 10.0,
+      ),
       child: ListView(
         children: [
           Column(
