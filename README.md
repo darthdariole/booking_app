@@ -1,16 +1,10 @@
 # booking_app
 
-A new Flutter project.
 
-## Getting Started
+Booking application created in Flutter by Daud Irfan [Twitter](https://twitter.com/darthdariole)
 
-This project is a starting point for a Flutter application.
+## Features
+1. Create orders.
+2. Import customers and products from txt file.
+3. Export orders in txt file format.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
