@@ -23,6 +23,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   bool _proFileSuccess = false;
   bool _custFileSuccess = false;
 
+  bool _quirkyFormat = false;
+
   FolderStructure folderStructure = FolderStructure();
   final List<Customer> customers = <Customer>[];
   List<Product> products = <Product>[];
@@ -234,6 +236,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     });
   }
 
+  Future<void> _getFormatForExport() async {
+    await StorageUtil.getInstance();
+    setState(() {
+      _quirkyFormat = StorageUtil.getBool("quirkyFormat");
+    });
+  }
+
   _getOrderCountFromDatabase() async {
     var _orderno = await OrdersDatabaseHelper.todayOrderCount();
     setState(() {
@@ -255,6 +264,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     _getUnitDetailFromPref();
     _getOrderAmountFromDatabase();
     _getOrderCountFromDatabase();
+    _getFormatForExport();
   }
 
   @override
@@ -340,7 +350,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               3. Check Sub Folders.
               4. Read file from Import folder.
               */
-              if (await _checkPermissionAndDirectory()) {
+              if (await _checkPermissionAndDirectory() && !_quirkyFormat) {
                 await _readCustFile().whenComplete(
                   () async {
                     CustomerDatabase.insertCustomers(customers);
@@ -381,7 +391,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             title: new Text("Import Product"),
             subtitle: new Text("Import products data from device storage."),
             onTap: () async {
-              if (await _checkPermissionAndDirectory()) {
+              if (await _checkPermissionAndDirectory() && !_quirkyFormat) {
                 await _readProductFile().whenComplete(
                   () {
                     ProductsDatabaseHelper.insertProducts(products);
@@ -481,6 +491,28 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => FilesHistory()));
             },
+          ),
+          ListTile(
+            title: Container(
+              child: Row(
+                children: [
+                  const Text('Import/Export format Quirky Soft'),
+                  Spacer(),
+                  Switch(
+                    value: _quirkyFormat,
+                    onChanged: (value) {
+                      setState(() {
+                        _quirkyFormat = value;
+                        StorageUtil.getInstance();
+                        StorageUtil.setBool("quirkyFormat", value);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            subtitle: const Text(
+                'Change import/export format to Quirky soft for use with Quirky Soft Software.'),
           ),
         ],
       ),
