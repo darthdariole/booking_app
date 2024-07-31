@@ -47,7 +47,9 @@ class _FilesHistoryState extends State<FilesHistory> {
   getFileLastModified(int index) {
     File file = File(_files![index].path);
     DateTime lastModified;
-    if (file != null) {
+    if (file.existsSync()) {
+      /* Changed file != null to file.existsSync(), 
+      Changes not yet tested. if something goes wrong refer here */
       lastModified = file.lastModifiedSync();
     } else {
       lastModified = DateTime.now();

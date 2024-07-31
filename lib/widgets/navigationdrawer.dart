@@ -14,12 +14,12 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../models/customer.dart';
 
-class NavigationDrawer extends StatefulWidget {
+class MyNavigationDrawer extends StatefulWidget {
   @override
-  State<NavigationDrawer> createState() => _NavigationDrawerState();
+  State<MyNavigationDrawer> createState() => _MyNavigationDrawerState();
 }
 
-class _NavigationDrawerState extends State<NavigationDrawer> {
+class _MyNavigationDrawerState extends State<MyNavigationDrawer> {
   bool _proFileSuccess = false;
   bool _custFileSuccess = false;
 
@@ -111,6 +111,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       _filePath = await FolderStructure.getImportFilePath() +
           "/Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Documents";
     }
+    print("Import path is: " + _filePath);
     List<FileSystemEntity> _listFiles = [];
     var dir = Directory(_filePath);
     await dir.list().forEach((element) {
@@ -496,8 +497,8 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             title: Container(
               child: Row(
                 children: [
-                  const Text('Import/Export format Quirky Soft'),
-                  Spacer(),
+                  Flexible(
+                      child: const Text('Import/Export format Quirky Soft')),
                   Switch(
                     value: _quirkyFormat,
                     onChanged: (value) {

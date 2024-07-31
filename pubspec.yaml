@@ -27,23 +27,23 @@ dependencies:
   sqflite: ^2.0.2+1
   path: ^1.8.0
   path_provider: ^2.0.11
-  permission_handler: ^9.2.0
+  permission_handler: ^11.0.1
   file_manager: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
-  geolocator: ^8.2.1
-  location: ^4.4.0
+  geolocator: 11.0.0
+  location: ^5.0.3
   shared_preferences: ^2.0.15
   device_info: ^2.0.3
-  share_plus: ^4.0.10
+  share_plus: ^7.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
     
-  flutter_launcher_icons: "^0.9.2"
+  flutter_launcher_icons: ^0.13.1
 flutter_icons:
   android: true
   image_path: "assets/invoice.png"

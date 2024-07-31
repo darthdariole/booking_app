@@ -1,15 +1,19 @@
 //TODO:2. Search in orders feature.
 //TODO: Problem in importing.Updated files not picking up.
+import 'dart:io';
+
 import 'package:booking_app/helpers/StorageUtil.dart';
 import 'package:booking_app/helpers/folderStructure.dart';
 import 'package:booking_app/helpers/ordersDBHelper.dart';
 import 'package:booking_app/models/ordermaster.dart';
 import 'package:booking_app/screens/createorder.dart';
-import 'package:booking_app/widgets/exportModal.dart';
 import 'package:booking_app/widgets/navigationdrawer.dart';
+import 'package:booking_app/widgets/exportModal.dart';
 import 'package:booking_app/widgets/ordersList.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
 import '../widgets/filterOrdersList.dart';
@@ -66,6 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
         display the current date and saleman name. Company branding is optional 
         maybe I will add it later.
         */
+
+      /* Need a seperate button for refreshing Customers and Products Data */
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,10 +272,12 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Icon(Icons.add),
         elevation: 2.0,
+        //shape: CircleBorder(),
+        backgroundColor: Colors.orangeAccent,
         tooltip: "Create Order",
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: AutomaticNotchedShape(BeveledRectangleBorder()),
         elevation: 0,
         color: Colors.blueGrey,
         child: Row(
@@ -332,13 +340,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             IconButton(
-                tooltip: "Search current orders list",
-                icon: Icon(Icons.search),
-                onPressed: () => {
-                      setState(() {
-                        _searchMode = !_searchMode;
-                      })
-                    }),
+              tooltip: "Update Customers & Products data",
+              icon: Icon(Icons.refresh_rounded),
+              onPressed: () async {},
+            ),
             IconButton(
               tooltip: "Export and send orders",
               icon: Icon(Icons.send),
@@ -360,8 +365,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       /*
         Delegate the navigation drawer in seperate component file to ease the code.
+        Now the seperate navigation drawer some how doesnt work. Need to fix ASAP. [FIXED]
       */
-      drawer: NavigationDrawer(),
+      drawer: MyNavigationDrawer(),
     );
   }
 }

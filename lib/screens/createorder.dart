@@ -418,6 +418,7 @@ class _CreateOrderState extends State<CreateOrder> {
                   ),
                 ],
               ),
+              //TODO: Editing an item and setting quantity to 0 adds 0 quantity,
               Expanded(
                   child: _bookingItemsList.length > 0
                       ? ListView.builder(
@@ -689,7 +690,7 @@ class _CreateOrderState extends State<CreateOrder> {
                   ),
                   Spacer(),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: TextField(
                       enabled: !_viewMode,
                       keyboardType: TextInputType.numberWithOptions(
